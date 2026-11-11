@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class SimpleProducer {
+public class Producer {
 
     private static final String BOOTSTRAP_SERVERS = "localhost:9092";
     private static final String TOPIC = "test-topic";
