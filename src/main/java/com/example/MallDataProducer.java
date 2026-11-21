@@ -7,22 +7,26 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class Producer {
-
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-    private static final String TOPIC = "test-topic";
-
+public class MallDataProducer {
     public static void main(String[] args) {
+        // 1. 설정
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 
-        try (KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
-            ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, "hello kafka");
-            producer.send(record);
-            producer.flush();
-            System.out.println("메시지 전송 완료: " + record.value());
-        }
+        // 2. 프로듀서 생성
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+
+        // 3. 보낼 메시지(레코드) 생성
+        ProducerRecord<String, String> record =
+                new ProducerRecord<>("test-topic", "hello kafka");
+
+        // 4. 전송
+        producer.send(record);
+
+        // 5. 버퍼에 남은 거 다 보내고 종료
+        producer.flush();
+        producer.close();
     }
 }
